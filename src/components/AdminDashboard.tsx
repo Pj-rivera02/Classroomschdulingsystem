@@ -28,7 +28,6 @@ export function AdminDashboard() {
     const loadClassrooms = () => {
       const rooms = dataService.getClassrooms();
       setClassrooms(rooms);
-      filterClassrooms(rooms, searchTerm, statusFilter);
     };
 
     loadClassrooms();

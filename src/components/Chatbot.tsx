@@ -59,13 +59,15 @@ const getChatbotResponse = (message: string): string => {
     return `Ask me about classroom counts for a specific department, like chemistry or mathematics.`;
   }
 
-  if ((query.includes('course') || query.includes('courses')) &&
-      (query.includes('what') || query.includes('which') || query.includes('offer') || query.includes('available') || query.includes('list') || query.includes('program')))
-  {
-    return `The school offers the following courses: DIT, BSE, BTVTED, BSMA, and DHRT.`;
-  }
-
   const roomNumberMatch = query.match(/room\s*(\d+)/);
+
+  if (query.includes('course') || query.includes('courses')) {
+    if (query.includes('what kind') || query.includes('available') || query.includes('offer') || query.includes('list') || query.includes('program') || query.includes('which')) {
+      return `The school offers the following courses: DIT, BSE, BTVTED, BSMA, and DHRT.`;
+    }
+    // Handle simple "course" or "courses" queries
+    return `The school offers the following courses: DIT, BSE, BTVTED, BSMA, and DHRT. For more details, try asking 'what courses are available?' or 'list all courses'.`;
+  }
   if (roomNumberMatch) {
     const roomNumber = roomNumberMatch[1];
     const classroom = classrooms.find((room) => room.roomNumber === roomNumber);
@@ -95,16 +97,10 @@ const getChatbotResponse = (message: string): string => {
     return `The dean of the College of Saint Amatiel Malabon City is Dr. Jeffrey T. Dela Cruz.`;
   }
 
-  if (query.includes('course') || query.includes('courses')) {
-    if (query.includes('what kind') || query.includes('available') || query.includes('offer')) {
-      return `The school offers the following courses: DIT, BSE, BTVTED, BSMA, and DHRT.`;
-    }
-  }
-
   const isGrade11 = /grade\s*11|11th grade/.test(query);
   const isGrade12 = /grade\s*12|12th grade/.test(query);
-  if (query.includes('requirements') && (query.includes('enrollment') || query.includes('enroll'))) {
-    if (isGrade11 || isGrade12 || query.includes('incoming')) {
+  if (query.includes('requirements') || query.includes('required documents') || query.includes('enrollment requirements')) {
+    if (isGrade11 || isGrade12 || query.includes('incoming') || query.includes('grade 11') || query.includes('grade 12')) {
       return `The requirements for incoming Grade 11 and 12 enrollment are:
 1. Grade 10 Original Card
 2. PSA (Photocopy)
@@ -114,6 +110,8 @@ const getChatbotResponse = (message: string): string => {
 6. Long Brown Envelope
 7. Long White Envelope`;
     }
+    // Handle general requirements query
+    return `For enrollment requirements, please specify if you are an incoming Grade 11 or Grade 12 student. The requirements include: Grade 10 Original Card, PSA (Photocopy), Good Moral (Original), 2x2 ID Picture, 1x1 ID Picture, Long Brown Envelope, and Long White Envelope.`;
   }
 
   if (/contact|call|text|facebook|tiktok|inquiry|reach/.test(query)) {
@@ -125,6 +123,10 @@ TikTok: https://www.tiktok.com/amatielians`;
 
   if (query.includes('where') && query.includes('located')) {
     return `The school is located at 118 Int. Gen. Luna St, Malabon City, 1470 Metro Manila.`;
+  }
+
+  if (query.includes('location') || query.includes('address') || query.includes('where') || query.includes('located')) {
+    return `The school is located at 118 Int. Gen. Luna St, Malabon City, 1470 Metro Manila. View on Google Maps: https://www.google.com/maps/search/?api=1&query=118+Int.+Gen.+Luna+St,+Malabon+City`;
   }
 
   if (query.includes('school') || query.includes('information') || query.includes('info')) {

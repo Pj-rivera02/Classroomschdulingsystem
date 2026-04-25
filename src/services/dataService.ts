@@ -1,4 +1,4 @@
-import { Classroom, ClassroomLog, User, ClassroomStatus, UserRole } from '../types';
+import { Classroom, ClassroomLog, User, UserRole } from '../types';
 
 type Listener = () => void;
 
@@ -121,7 +121,9 @@ class DataService {
 
   subscribe(listener: Listener) {
     this.listeners.add(listener);
-    return () => this.listeners.delete(listener);
+    return () => {
+      this.listeners.delete(listener);
+    };
   }
 
   private notifyListeners() {
